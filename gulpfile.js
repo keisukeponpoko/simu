@@ -30,23 +30,3 @@ elixir(mix => {
     mix.sass('app.scss')
        .browserify('system.js');
 });
-
-
-gulp.task('import', function() {
-
-    // onsenUIをpublic下に設置する。
-    var onsenUIPath = 'node_modules/onsenui';
-    gulp.src(onsenUIPath + '/css/**')
-        .pipe(gulp.dest('public/css/lib/onsenui'));
-    gulp.src(onsenUIPath + '/js/**')
-        .pipe(gulp.dest('public/js/lib/onsenui'));
-
-    // AngularJSをpublic下に設置する。
-    var angularJSPath = 'node_modules/angular';
-    gulp.src(angularJSPath + '/angular.min.js')
-        .pipe(gulp.dest('public/js/lib/angular'));
-    gulp.src(angularJSPath + '/angular.js')
-        .pipe(gulp.dest('public/js/lib/angular'));
-    gulp.src(angularJSPath + '/angular-csp.css')
-        .pipe(gulp.dest('public/css/lib/angular'));
-});

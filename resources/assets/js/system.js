@@ -1,6 +1,14 @@
 // Controllers
 // コントローラー用のclassオブジェクトをimportする。
-//import AppController from './controllers/AppController';
+import RecommendController from './controllers/RecommendController';
+import SliderController from './controllers/SliderController';
+import AreaController from './controllers/AreaController';
+
+// Values
+// バリュー用の変数、オブジェクトをimportする。
+import {
+  PREF,
+} from './definitions/area';
 
 // directives
 // ディレクトリ用のオブジェクトをimportする。
@@ -10,30 +18,25 @@
 // サービス用のclassオブジェクトをimportする。
 //import SearchQueryService from './services/SearchQueryService';
 
-// Values
-// バリュー用の変数、オブジェクトをimportする。
-/*import {
-  LOG_TAB,
-} from './definitions/UI';
-*/
 
 (() => {
   // appモジュールを定義する
-  const module = angular.module('app', ['onsen']);
-  module.controller('AppController', function($scope) { });
+  const app = angular.module('app', ['rzModule']);
 
   // Contorller
-  // App
-  // モジュールにAppControllerコントローラーを定義する。以下同
-  //module.controller('AppController', AppController);
+  // モジュールにコントローラーを定義する。
+  app.controller('RecommendController', RecommendController);
+  app.controller('SliderController', SliderController);
+  app.controller('AreaController', AreaController);
+
+  // Value
+  // モジュールにPREFバリューを定義する。
+  app.value('PREF', PREF);
 
   // Directive
   // モジュールにchoParentScrollDisableディレクティブを定義する
   //module.directive('choParentScrollDisable', ChoParentScrollDisable);
 
-  // Value
-  // モジュールにPROFILE_TABバリューを定義する。以下同
-  //module.value('PROFILE_TAB', PROFILE_TAB);
 
   // Service
   // モジュールにSearchQueryServiceサービスを定義する。以下同
