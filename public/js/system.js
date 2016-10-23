@@ -133,17 +133,16 @@ var RecommendController = function () {
       var _this2 = this;
 
       this.loading = true;
-      this.lists = {};
+      $("body").animate({ scrollTop: $("#recommend").offset().top }, "slow");
       this.SearchService.search(this.area, this.money, this.cond).then(function (response) {
         _this2.lists = response.data;
         _this2.loading = false;
-        // set the location.hash to the id of
-        // the element you wish to scroll to.
-        _this2.$location.hash('recommend');
-
-        // call $anchorScroll()
-        _this2.$anchorScroll();
       });
+    }
+  }, {
+    key: 'goTop',
+    value: function goTop() {
+      $("body").animate({ scrollTop: 0 }, "normal");
     }
   }]);
 

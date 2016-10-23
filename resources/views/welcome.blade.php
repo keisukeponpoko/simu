@@ -18,6 +18,9 @@
       .align-center {
         text-align: center;
       }
+      .margin-center {
+        margin: 0 auto;
+      }
       .radio {
         display: none;
       }

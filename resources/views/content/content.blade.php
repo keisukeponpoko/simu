@@ -18,11 +18,22 @@
     おすすめ施設を検索
   </button>
 
-  <div id="recommend" class="contents" ng-if="$ctrl.lists.length">
-    <h2>おすすめ施設</h2>
-    <p ng-show="$ctrl.loading">検索中...</p>
-    <div ng-if="!$ctrl.loading">
-      @include('content.list')
+  <div id="recommend" class="contents">
+    <div ng-show="$ctrl.loading">
+      <img ng-src="img/loading.gif" class="img-responsive margin-center">
     </div>
+    <div ng-show="$ctrl.lists.length">
+      <h2>おすすめ施設</h2>
+      <div ng-if="!$ctrl.loading">
+        @include('content.list')
+      </div>
+    </div>
+  </div>
+
+  <div ng-show="$ctrl.lists.length" class="contents">
+    <button class="btn btn-primary btn-block btn-lg"
+      ng-click="$ctrl.goTop()">
+      条件を変更する
+    </button>
   </div>
 </div>

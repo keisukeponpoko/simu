@@ -30,19 +30,17 @@ export default class RecommendController {
 
   search() {
     this.loading = true;
-    this.lists = {};
+    $("body").animate({scrollTop: $("#recommend").offset().top}, "slow");
     this.SearchService.search(this.area, this.money, this.cond).then(
       (response) => {
         this.lists = response.data;
         this.loading = false;
-        // set the location.hash to the id of
-        // the element you wish to scroll to.
-        this.$location.hash('recommend');
-
-        // call $anchorScroll()
-        this.$anchorScroll();
       }
     );
+  }
+
+  goTop() {
+    $("body").animate({scrollTop: 0}, "normal");
   }
 }
 

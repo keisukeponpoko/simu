@@ -1,3 +1,4 @@
+<h4>介護状態</h4>
 <div class="align-center contents">
   <div class="btn-group">
     <label class='btn btn-default btn-lg'
