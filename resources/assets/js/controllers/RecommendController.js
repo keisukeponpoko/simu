@@ -1,27 +1,37 @@
 export default class RecommendController {
   constructor($scope, SearchService) {
-    this.area = {};
-    this.money = {};
+    this.SearchService = SearchService;
+    this.loading = false;
+
+    this.area = {
+      prefecture: null,
+      city: null
+    };
+    this.money = {
+      monthly: 0,
+      temporary: 0
+    };
 
     $scope.$on('pushInputArea', (event, arg) => {
       this.area = arg;
-      console.log(this.area);
     });
 
     $scope.$on('pushInputMoney', (event, arg) => {
       this.money = arg;
-      console.log(this.money);
     });
   }
 
   search() {
-    this.MemberService.search(this.area, this.money).then(
+    this.loading = true;
+    this.SearchService.search(this.area, this.money).then(
       (response) => {
-        console.log(response);
+        this.lists = response.data;
+        this.loading = false;
       }
     );
   }
 }
+
 RecommendController.$inject = [
   '$scope',
   'SearchService'

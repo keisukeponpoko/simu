@@ -3,7 +3,7 @@ export default class SearchService {
     this.$http = $http;
   }
 
-  loginRequest(area, money) {
+  search(area, money) {
     const req = {
       method: 'POST',
       url: '/api/search',

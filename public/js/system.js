@@ -51,25 +51,36 @@ var RecommendController = function () {
 
     _classCallCheck(this, RecommendController);
 
-    this.area = {};
-    this.money = {};
+    this.SearchService = SearchService;
+    this.loading = false;
+
+    this.area = {
+      prefecture: null,
+      city: null
+    };
+    this.money = {
+      monthly: 0,
+      temporary: 0
+    };
 
     $scope.$on('pushInputArea', function (event, arg) {
       _this.area = arg;
-      console.log(_this.area);
     });
 
     $scope.$on('pushInputMoney', function (event, arg) {
       _this.money = arg;
-      console.log(_this.money);
     });
   }
 
   _createClass(RecommendController, [{
     key: 'search',
     value: function search() {
-      this.MemberService.search(this.area, this.money).then(function (response) {
-        console.log(response);
+      var _this2 = this;
+
+      this.loading = true;
+      this.SearchService.search(this.area, this.money).then(function (response) {
+        _this2.lists = response.data;
+        _this2.loading = false;
       });
     }
   }]);
@@ -78,6 +89,7 @@ var RecommendController = function () {
 }();
 
 exports.default = RecommendController;
+
 
 RecommendController.$inject = ['$scope', 'SearchService'];
 
@@ -272,6 +284,48 @@ var PREF = exports.PREF = {
 },{}],5:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SearchService = function () {
+  function SearchService($http) {
+    _classCallCheck(this, SearchService);
+
+    this.$http = $http;
+  }
+
+  _createClass(SearchService, [{
+    key: 'search',
+    value: function search(area, money) {
+      var req = {
+        method: 'POST',
+        url: '/api/search',
+        data: {
+          area: area,
+          money: money
+        },
+        responseType: 'json'
+      };
+
+      return this.$http(req);
+    }
+  }]);
+
+  return SearchService;
+}();
+
+exports.default = SearchService;
+
+SearchService.$inject = ['$http'];
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
 var _RecommendController = require('./controllers/RecommendController');
 
 var _RecommendController2 = _interopRequireDefault(_RecommendController);
@@ -284,6 +338,10 @@ var _AreaController = require('./controllers/AreaController');
 
 var _AreaController2 = _interopRequireDefault(_AreaController);
 
+var _SearchService = require('./services/SearchService');
+
+var _SearchService2 = _interopRequireDefault(_SearchService);
+
 var _area = require('./definitions/area');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -294,38 +352,34 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Services
 // サービス用のclassオブジェクトをimportする。
-//import SearchQueryService from './services/SearchQueryService';
-
-
-// Controllers
-// コントローラー用のclassオブジェクトをimportする。
 (function () {
   // appモジュールを定義する
-  var app = angular.module('app', ['rzModule']);
+  var module = angular.module('app', ['rzModule']);
 
   // Contorller
   // モジュールにコントローラーを定義する。
-  app.controller('RecommendController', _RecommendController2.default);
-  app.controller('SliderController', _SliderController2.default);
-  app.controller('AreaController', _AreaController2.default);
+  module.controller('RecommendController', _RecommendController2.default);
+  module.controller('SliderController', _SliderController2.default);
+  module.controller('AreaController', _AreaController2.default);
 
   // Value
   // モジュールにPREFバリューを定義する。
-  app.value('PREF', _area.PREF);
+  module.value('PREF', _area.PREF);
+
+  // Service
+  //モジュールにサービスを定義する。
+  module.service('SearchService', _SearchService2.default);
 
   // Directive
   // モジュールにchoParentScrollDisableディレクティブを定義する
   //module.directive('choParentScrollDisable', ChoParentScrollDisable);
-
-
-  // Service
-  // モジュールにSearchQueryServiceサービスを定義する。以下同
-  //module.service('SearchQueryService', SearchQueryService);
 })();
 
 // Values
 // バリュー用の変数、オブジェクトをimportする。
+// Controllers
+// コントローラー用のclassオブジェクトをimportする。
 
-},{"./controllers/AreaController":1,"./controllers/RecommendController":2,"./controllers/SliderController":3,"./definitions/area":4}]},{},[5]);
+},{"./controllers/AreaController":1,"./controllers/RecommendController":2,"./controllers/SliderController":3,"./definitions/area":4,"./services/SearchService":5}]},{},[6]);
 
 //# sourceMappingURL=system.js.map
