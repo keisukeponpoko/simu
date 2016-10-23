@@ -16,7 +16,8 @@ export default class SliderController {
         floor: 0,
         ceil: 50,
         step: 1,
-        translate: this.formatToPrice
+        translate: this.formatToPrice,
+        showSelectionBar: true
       }
     };
 
@@ -26,7 +27,8 @@ export default class SliderController {
         floor: 0,
         ceil: 100,
         step: 1,
-        translate: this.formatToPrice
+        translate: this.formatToPrice,
+        showSelectionBar: true
       }
     };
 
@@ -36,7 +38,8 @@ export default class SliderController {
         floor: 0,
         ceil: 3000,
         step: 10,
-        translate: this.formatToPrice
+        translate: this.formatToPrice,
+        showSelectionBar: true
       }
     };
 

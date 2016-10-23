@@ -3,13 +3,14 @@ export default class SearchService {
     this.$http = $http;
   }
 
-  search(area, money) {
+  search(area, money, condition) {
     const req = {
       method: 'POST',
       url: '/api/search',
       data: {
         area,
-        money
+        money,
+        condition
       },
       responseType: 'json',
     };

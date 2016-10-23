@@ -45,15 +45,65 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var ConditionController = function () {
+  function ConditionController($scope, CONDITION, DESIRED) {
+    _classCallCheck(this, ConditionController);
+
+    this.$scope = $scope;
+    this.conditions = CONDITION;
+    this.desired = DESIRED;
+    this.select = {
+      condition: null,
+      desired: []
+    };
+  }
+
+  _createClass(ConditionController, [{
+    key: 'pushInputCondition',
+    value: function pushInputCondition() {
+      this.$scope.$emit('pushInputCondition', this.select);
+    }
+  }, {
+    key: 'conditionCheck',
+    value: function conditionCheck(key) {
+      return this.select.condition === key;
+    }
+  }, {
+    key: 'openModal',
+    value: function openModal(modalName) {
+      $('#' + modalName).modal();
+    }
+  }]);
+
+  return ConditionController;
+}();
+
+exports.default = ConditionController;
+
+ConditionController.$inject = ['$scope', 'CONDITION', 'DESIRED'];
+
+},{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var RecommendController = function () {
-  function RecommendController($scope, SearchService) {
+  function RecommendController($scope, $location, $anchorScroll, SearchService) {
     var _this = this;
 
     _classCallCheck(this, RecommendController);
 
+    this.$location = $location;
+    this.$anchorScroll = $anchorScroll;
     this.SearchService = SearchService;
     this.loading = false;
-
+    this.lists = {};
     this.area = {
       prefecture: null,
       city: null
@@ -62,6 +112,7 @@ var RecommendController = function () {
       monthly: 0,
       temporary: 0
     };
+    this.cond = {};
 
     $scope.$on('pushInputArea', function (event, arg) {
       _this.area = arg;
@@ -69,6 +120,10 @@ var RecommendController = function () {
 
     $scope.$on('pushInputMoney', function (event, arg) {
       _this.money = arg;
+    });
+
+    $scope.$on('pushInputCondition', function (event, arg) {
+      _this.cond = arg;
     });
   }
 
@@ -78,9 +133,16 @@ var RecommendController = function () {
       var _this2 = this;
 
       this.loading = true;
-      this.SearchService.search(this.area, this.money).then(function (response) {
+      this.lists = {};
+      this.SearchService.search(this.area, this.money, this.cond).then(function (response) {
         _this2.lists = response.data;
         _this2.loading = false;
+        // set the location.hash to the id of
+        // the element you wish to scroll to.
+        _this2.$location.hash('recommend');
+
+        // call $anchorScroll()
+        _this2.$anchorScroll();
       });
     }
   }]);
@@ -91,9 +153,9 @@ var RecommendController = function () {
 exports.default = RecommendController;
 
 
-RecommendController.$inject = ['$scope', 'SearchService'];
+RecommendController.$inject = ['$scope', '$location', '$anchorScroll', 'SearchService'];
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -126,7 +188,8 @@ var SliderController = function () {
         floor: 0,
         ceil: 50,
         step: 1,
-        translate: this.formatToPrice
+        translate: this.formatToPrice,
+        showSelectionBar: true
       }
     };
 
@@ -136,7 +199,8 @@ var SliderController = function () {
         floor: 0,
         ceil: 100,
         step: 1,
-        translate: this.formatToPrice
+        translate: this.formatToPrice,
+        showSelectionBar: true
       }
     };
 
@@ -146,7 +210,8 @@ var SliderController = function () {
         floor: 0,
         ceil: 3000,
         step: 10,
-        translate: this.formatToPrice
+        translate: this.formatToPrice,
+        showSelectionBar: true
       }
     };
 
@@ -240,7 +305,7 @@ exports.default = SliderController;
 
 SliderController.$inject = ['$scope', '$timeout'];
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -281,7 +346,22 @@ var PREF = exports.PREF = {
   }
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var CONDITION = exports.CONDITION = {
+  'self': '自立',
+  'support': '要支援',
+  'nurse': '要介護',
+  'dementia': '認知症'
+};
+
+var DESIRED = exports.DESIRED = ['海が見える', '夫婦部屋あり', '人工透析可能', 'ペットと暮らせる', '温泉あり', '駅から近い'];
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -301,13 +381,14 @@ var SearchService = function () {
 
   _createClass(SearchService, [{
     key: 'search',
-    value: function search(area, money) {
+    value: function search(area, money, condition) {
       var req = {
         method: 'POST',
         url: '/api/search',
         data: {
           area: area,
-          money: money
+          money: money,
+          condition: condition
         },
         responseType: 'json'
       };
@@ -323,7 +404,7 @@ exports.default = SearchService;
 
 SearchService.$inject = ['$http'];
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var _RecommendController = require('./controllers/RecommendController');
@@ -338,11 +419,17 @@ var _AreaController = require('./controllers/AreaController');
 
 var _AreaController2 = _interopRequireDefault(_AreaController);
 
+var _ConditionController = require('./controllers/ConditionController');
+
+var _ConditionController2 = _interopRequireDefault(_ConditionController);
+
 var _SearchService = require('./services/SearchService');
 
 var _SearchService2 = _interopRequireDefault(_SearchService);
 
 var _area = require('./definitions/area');
+
+var _condition = require('./definitions/condition');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -350,21 +437,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // ディレクトリ用のオブジェクトをimportする。
 //import ChoParentScrollDisable from './directives/cho_parent_scroll_disable/cho_parent_scroll_disable.js';
 
-// Services
-// サービス用のclassオブジェクトをimportする。
+// Values
+// バリュー用の変数、オブジェクトをimportする。
 (function () {
   // appモジュールを定義する
-  var module = angular.module('app', ['rzModule']);
+  var module = angular.module('app', ['rzModule', 'checklist-model']);
 
   // Contorller
   // モジュールにコントローラーを定義する。
   module.controller('RecommendController', _RecommendController2.default);
   module.controller('SliderController', _SliderController2.default);
   module.controller('AreaController', _AreaController2.default);
+  module.controller('ConditionController', _ConditionController2.default);
 
   // Value
   // モジュールにPREFバリューを定義する。
   module.value('PREF', _area.PREF);
+  module.value('CONDITION', _condition.CONDITION);
+  module.value('DESIRED', _condition.DESIRED);
 
   // Service
   //モジュールにサービスを定義する。
@@ -375,11 +465,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   //module.directive('choParentScrollDisable', ChoParentScrollDisable);
 })();
 
-// Values
-// バリュー用の変数、オブジェクトをimportする。
+// Services
+// サービス用のclassオブジェクトをimportする。
 // Controllers
 // コントローラー用のclassオブジェクトをimportする。
 
-},{"./controllers/AreaController":1,"./controllers/RecommendController":2,"./controllers/SliderController":3,"./definitions/area":4,"./services/SearchService":5}]},{},[6]);
+},{"./controllers/AreaController":1,"./controllers/ConditionController":2,"./controllers/RecommendController":3,"./controllers/SliderController":4,"./definitions/area":5,"./definitions/condition":6,"./services/SearchService":7}]},{},[8]);
 
 //# sourceMappingURL=system.js.map

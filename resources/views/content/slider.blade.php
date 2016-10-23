@@ -1,22 +1,33 @@
 <div>
-  <h4>月々の年金額 : @{{$vm.incomePension.value}}万円</h4>
+  <h4>
+    月々の年金額 :
+    <input type="text" class="moneyForm" ng-model="$vm.incomePension.value">
+    万
+  </h4>
   <rzslider rz-slider-model="$vm.incomePension.value"
             rz-slider-options="$vm.incomePension.options">
   </rzslider>
 </div>
 
 <div>
-  <h4>月々の支援額 : @{{$vm.incomeAssist.value}}万円</h4>
+  <h4>
+    月々の支援額 :
+    <input type="text" class="moneyForm" ng-model="$vm.incomeAssist.value">
+    万
+  </h4>
   <rzslider rz-slider-model="$vm.incomeAssist.value"
             rz-slider-options="$vm.incomeAssist.options">
   </rzslider>
 </div>
 
 <div>
-  <h4>入居時に支払える額 : @{{$vm.payTemporary.value}}万円
-    <button class="btn btn-primary"
+  <h4>
+    入居時に払える額 :
+    <input type="text" class="moneyForm" ng-model="$vm.payTemporary.value">
+    万
+    <button class="btn btn-success"
             ng-click="$vm.openModal('payTemporaryModal')">
-      計算
+      <i class="fa ion-calculator"></i>
     </button>
   </h4>
   <rzslider rz-slider-model="$vm.payTemporary.value"
@@ -81,7 +92,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary"
+        <button type="button" class="btn btn-success"
           ng-click="$vm.calculatePayTemporary()" data-dismiss="modal">
             計算
         </button>
