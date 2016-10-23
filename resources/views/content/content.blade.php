@@ -22,15 +22,15 @@
     <div ng-show="$ctrl.loading">
       <img ng-src="img/loading.gif" class="img-responsive margin-center">
     </div>
-    <div ng-show="$ctrl.lists.length">
+    <div ng-show="$ctrl.lists.length && !$ctrl.loading">
       <h2>おすすめ施設</h2>
-      <div ng-if="!$ctrl.loading">
+      <div>
         @include('content.list')
       </div>
     </div>
   </div>
 
-  <div ng-show="$ctrl.lists.length" class="contents">
+  <div ng-show="$ctrl.lists.length && !$ctrl.loading">
     <button class="btn btn-primary btn-block btn-lg"
       ng-click="$ctrl.goTop()">
       条件を変更する
