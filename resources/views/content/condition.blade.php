@@ -1,14 +1,16 @@
-<div class="btn-group contents">
-  <label class='btn btn-default'
-    ng-repeat="(key, value) in $cond.conditions"
-    ng-class="{radioActive: $cond.conditionCheck(key)}">
-    <input type="radio"
-      class="radio"
-      ng-model="$cond.select.condition"
-      value="@{{key}}"
-      ng-change="$cond.pushInputCondition()">
-    @{{value}}
-  </label>
+<div class="align-center contents">
+  <div class="btn-group">
+    <label class='btn btn-default btn-lg'
+      ng-repeat="(key, value) in $cond.conditions"
+      ng-class="{radioActive: $cond.conditionCheck(key)}">
+      <input type="radio"
+        class="radio"
+        ng-model="$cond.select.condition"
+        value="@{{key}}"
+        ng-change="$cond.pushInputCondition()">
+      @{{value}}
+    </label>
+  </div>
 </div>
 
 <div class="align-center">

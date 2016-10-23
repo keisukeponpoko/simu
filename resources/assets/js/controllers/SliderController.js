@@ -10,37 +10,58 @@ export default class SliderController {
     this.payTemporary = {};
     this.payTemporaryMoneys = {};
 
+    this.commonOptions = {
+      translate: this.formatToPrice,
+      showSelectionBar: true,
+      customValueToPosition: function(val, minVal, maxVal) {
+        val = Math.sqrt(val);
+        minVal = Math.sqrt(minVal);
+        maxVal = Math.sqrt(maxVal);
+        var range = maxVal - minVal;
+        return (val - minVal) / range;
+      },
+      customPositionToValue: function(percent, minVal, maxVal) {
+        minVal = Math.sqrt(minVal);
+        maxVal = Math.sqrt(maxVal);
+        var value = percent * (maxVal - minVal) + minVal;
+        return Math.pow(value, 2);
+      }
+    };
+
     this.incomePension = {
       value: 0,
-      options: {
-        floor: 0,
-        ceil: 50,
-        step: 1,
-        translate: this.formatToPrice,
-        showSelectionBar: true
-      }
+      options: angular.extend(
+        {
+          floor: 0,
+          ceil: 100,
+          step: 1,
+        },
+        this.commonOptions
+      )
     };
 
     this.incomeAssist = {
       value: 0,
-      options: {
-        floor: 0,
-        ceil: 100,
-        step: 1,
-        translate: this.formatToPrice,
-        showSelectionBar: true
-      }
+      options: angular.extend(
+        {
+          floor: 0,
+          ceil: 300,
+          step: 1,
+        },
+        this.commonOptions
+      )
     };
 
     this.payTemporary = {
       value: 0,
-      options: {
-        floor: 0,
-        ceil: 3000,
-        step: 10,
-        translate: this.formatToPrice,
-        showSelectionBar: true
-      }
+      options: angular.extend(
+        {
+          floor: 0,
+          ceil: 10000,
+          step: 10,
+        },
+        this.commonOptions
+      )
     };
 
     this.temporaryMoney = [
@@ -84,6 +105,7 @@ export default class SliderController {
     this.pushInputMoney();
   }
 }
+
 SliderController.$inject = [
   '$scope',
   '$timeout'
